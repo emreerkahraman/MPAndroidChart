@@ -2,6 +2,8 @@ package com.github.mikephil.charting.renderer;
 
 import android.graphics.Canvas;
 
+import androidx.annotation.Nullable;
+
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.CombinedChart;
@@ -10,6 +12,7 @@ import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.dataprovider.BarLineScatterCandleBubbleDataProvider;
+import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.lang.ref.WeakReference;
@@ -38,6 +41,26 @@ public class CombinedChartRenderer extends DataRenderer {
      * Creates the renderers needed for this combined-renderer in the required order. Also takes the DrawOrder into
      * consideration.
      */
+
+    @Nullable
+    public  LineChartRenderer lineChartRenderer;
+
+    public void setLineChartRenderer(@Nullable LineChartRenderer lineChartRenderer) {
+        this.lineChartRenderer = lineChartRenderer;
+    }
+
+    public LineChartRenderer addCustomLineRenderer(LineDataProvider dataProvider, ChartAnimator animator, ViewPortHandler viewPortHandler){
+
+        if (lineChartRenderer==null){
+            return new LineChartRenderer(dataProvider,animator,viewPortHandler);
+        }else
+            return lineChartRenderer;
+
+
+
+    }
+
+
     public void createRenderers() {
 
         mRenderers.clear();
@@ -61,7 +84,7 @@ public class CombinedChartRenderer extends DataRenderer {
                     break;
                 case LINE:
                     if (chart.getLineData() != null)
-                        mRenderers.add(new CustomLineChartRenderer(chart, mAnimator, mViewPortHandler));
+                        mRenderers.add(  addCustomLineRenderer(chart,mAnimator,mViewPortHandler));
                     break;
                 case CANDLE:
                     if (chart.getCandleData() != null)

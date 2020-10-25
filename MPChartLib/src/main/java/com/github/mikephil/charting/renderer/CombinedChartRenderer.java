@@ -61,7 +61,7 @@ public class CombinedChartRenderer extends DataRenderer {
                     break;
                 case LINE:
                     if (chart.getLineData() != null)
-                        mRenderers.add(new LineChartRenderer(chart, mAnimator, mViewPortHandler));
+                        mRenderers.add(new CustomLineChartRenderer(chart, mAnimator, mViewPortHandler));
                     break;
                 case CANDLE:
                     if (chart.getCandleData() != null)
